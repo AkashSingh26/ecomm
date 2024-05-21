@@ -1,2 +1,74 @@
 <h1>Admin Home</h1>
-<%= icon('fa-regular', 'font-awesome') %>
+
+<div class="flex justify-between flex-wrap mt-8 w-full items-center max-w-4xl" >
+  <h2 class="text-2xl test-gray-800 font-medium mb-4">Daily Stats</h2>
+  <div class="flex gap-10 flex-col md:flex-row justify-between w-full">
+    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2 text-white">Revenue</div>
+        <p class="text-white text-base">
+          $<%= @quick_stats[:revenue] ? (@quick_stats[:revenue]/100.0).to_s : "0" %>
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2 text-white">Total Sales </div>
+        <p class="text-white text-base">
+          <%= @quick_stats[:sales] ? (@quick_stats[:sales]).to_s : "0" %>
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2 text-white">Avg Sales</div>
+        <p class="text-white text-base">
+          $<%= @quick_stats[:avg_sales] ? (@quick_stats[:avg_sales]/100.0).to_s : "0" %>
+        </p>
+      </div>
+    </div>
+
+    <div class="max-w-sm rounded overflow-hidden shadow-xl bg-gradient-to-r from-gray-400 to-gray-300">
+      <div class="px-6 py-4">
+        <div class="font-bold text-xl mb-2 text-white">Avg Sales</div>
+        <p class="text-white text-base">
+          $<%= @quick_stats[:per_sale].to_i %>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-8 w-full">
+    <h2 class="text-2xl text-gray-800 font-medium mb-4">Revenue Chart</h2>
+    <div class="w-full" data-controller = "dashboard" data-dashboard-revenue-value="<%= @revenue_by_day.to_json%>" >
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+
+  <div class="flex flex-col w-full">
+    <h2 class="text-2xl text-gray-800 font-medium mb-4">Recent Unfulfilled Orders</h2>
+    <div class="overflow-x-auto" >
+      <table class="min-w-full bg-gray-100" style="border-collapse:seperate; border-spacing:0;" >
+        <thead>
+          <tr class="text-gray-700">
+            <th class="bg-gray-100 border-gray-200 border-b-2 px-6 py-3">Order ID</th>
+            <th class="bg-gray-100 border-gray-200 border-b-2 px-6 py-3">Customer</th>
+            <th class="bg-gray-100 border-gray-200 border-b-2 px-6 py-3">Date</th>
+            <th class="bg-gray-100 border-gray-200 border-b-2 px-6 py-3">Amount</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <% @orders.each do |order| %>
+            <tr class="bg-white border-gray-200 border-b-2">
+              <td class="px-6 py-4 border-b border-gray-200"><%= order.id %></td>
+              <td class="px-6 py-4 border-b border-gray-200"><%= order.customer_email %></td>
+              <td class="px-6 py-4 border-b border-gray-200"><%= order.created_at.strftime("%m/%d/%Y") %></td>
+              <td class="px-6 py-4 border-b border-gray-200">$<%= (order.total/100.0).to_s %></td>
+            </tr>
+          <% end %>
+      </table>
+    </div>
+  </div>
+</div>
